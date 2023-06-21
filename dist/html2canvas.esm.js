@@ -1,6 +1,6 @@
 /*!
- * html2canvas 1.4.1 <https://html2canvas.hertzen.com>
- * Copyright (c) 2022 Niklas von Hertzen <https://hertzen.com>
+ * html2canvas 1.5.0 <https://html2canvas.hertzen.com>
+ * Copyright (c) 2023 Niklas von Hertzen <https://hertzen.com>
  * Released under MIT License
  */
 /*! *****************************************************************************
@@ -5259,7 +5259,12 @@ var DocumentCloner = /** @class */ (function () {
                 }
             });
         }); });
-        documentClone.wrappedJSObject.open();
+        if (documentClone.wrappedJSObject) {
+            documentClone.wrappedJSObject.open();
+        }
+        else {
+            documentClone.open();
+        }
         documentClone.write(serializeDoctype(document.doctype) + "<html></html>");
         // Chrome scrolls the parent document for some reason after the write to the cloned window???
         restoreOwnerScroll(this.referenceElement.ownerDocument, scrollX, scrollY);
