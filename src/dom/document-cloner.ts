@@ -129,7 +129,16 @@ export class DocumentCloner {
             return iframe;
         });
 
-        documentClone.open();
+        // Firefox only works with documentClone.wrappedJSObject, not documentClone directly
+        // but Chrome fails on documentClone.wrappedJSObject
+
+        type DocumentClone = Document & {wrappedJSObject: Document};
+        if ((documentClone as DocumentClone).wrappedJSObject) {
+            (documentClone as DocumentClone).wrappedJSObject.open();
+        } else {
+            documentClone.open();
+        }
+
         documentClone.write(`${serializeDoctype(document.doctype)}<html></html>`);
         // Chrome scrolls the parent document for some reason after the write to the cloned window???
         restoreOwnerScroll(this.referenceElement.ownerDocument, scrollX, scrollY);
